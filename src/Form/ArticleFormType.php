@@ -36,6 +36,7 @@ class ArticleFormType extends AbstractType
                },
                'placeholder' => 'Choose author',
                'choices' => $this->userRepository->findAllEmailAlphabetical(),
+               'invalid_message' => 'Stop hacking',
            ])
        ;
     }
