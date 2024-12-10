@@ -2,15 +2,14 @@
 
 namespace App\Form;
 
-use App\Entity\User;
+use App\Form\DataTransformer\EmailToUserTransformer;
 use App\Repository\UserRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ArticleFormType extends AbstractType
+class UserSelectTextType extends AbstractType
 {
     private UserRepository $userRepository;
 
@@ -21,23 +20,19 @@ class ArticleFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-       $builder
-           ->add('title', TextType::class, [
-               'help' => 'Choose something catchy!',
-           ])
-           ->add('content')
-           ->add('publishedAt', null, [
-               'widget' => 'single_text',
-           ])
-           ->add('author', UserSelectTextType::class)
-       ;
+        $builder->addModelTransformer(new EmailToUserTransformer($this->userRepository));
+    }
+
+    public function getParent()
+    {
+        return TextType::class;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-       $resolver->setDefaults([
-           'data_class' => 'App\Entity\Article'
-       ]);
+        $resolver->setDefaults([
+            'invalid_message' => 'User not found',
+        ]);
     }
 
 
