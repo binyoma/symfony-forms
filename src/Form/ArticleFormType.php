@@ -21,11 +21,14 @@ class ArticleFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
        $builder
            ->add('title', TextType::class, [
                'help' => 'Choose something catchy!',
            ])
-           ->add('content')
+           ->add('content', null, [
+               'rows'=> 15
+           ])
            ->add('publishedAt', null, [
                'widget' => 'single_text',
            ])
